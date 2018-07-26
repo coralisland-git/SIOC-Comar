@@ -11,6 +11,8 @@ export default class Client {
     workPhone = '';
     cellPhone = '';
     observations = '';
+    category = 'interesado';
+    deleted = false;
 
     constructor(obj) {
         Object.assign(this, obj);

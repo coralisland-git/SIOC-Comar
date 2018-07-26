@@ -70,7 +70,7 @@ class Latest extends Component {
 
     renderContent() {
         return (
-            <div className="highlights" style={{padding: 0}}>
+            <div className="highlights">
                 <InfiniteScroll
                     dataLength={this.state.items.length}
                     next={this.fetchMoreData}
@@ -80,9 +80,12 @@ class Latest extends Component {
                         loading={this.state.loading}
                     />}
                 >
-                    <Row>
-                        {this.state.items.map(dwelling => (
-                            <Col sm="6" md="4" key={dwelling._id}>
+                    <Row className="highlights-main">
+                        {this.state.items.map(dwelling => {
+                            let img_url = dwelling.images[0] !== undefined 
+                                            ? dwelling.images[0].secure_url.replace('/upload/', '/upload/w_400,q_auto,f_auto/') 
+                                            : 'http://via.placeholder.com/330x220';
+                            return ( <Col className="prop-listing-margin-fix" sm={6} md={4} key={dwelling._id}>
                                 <div
                                     className="highlight-box"
                                     onClick={() => this.props.history.push(`/admin/dwellings/card/${dwelling._id}`)}
@@ -90,11 +93,7 @@ class Latest extends Component {
                                     <div className="prop-detail-btns">
                                         <Button className="like"><FontAwesome name="heart" size="lg"/></Button>
                                     </div>
-                                    <img 
-                                        src={dwelling.images[0] !== undefined 
-                                            ? dwelling.images[0].secure_url.replace('/upload/', '/upload/w_400,q_auto,f_auto/') 
-                                            : 'http://via.placeholder.com/330x220'}
-                                    />
+                                    <div className="img" style={{width: '100%', height: '200px', backgroundSize: 'cover', backgroundImage: 'url("'+img_url+'")'}}></div>
                                     <Row className="highlight-body">
                                         <Col sm={12}>
                                             {dwelling.price
@@ -111,7 +110,8 @@ class Latest extends Component {
                                     </Row>
                                 </div>
                             </Col>
-                        ))}
+                        );
+                    })}
                     </Row>
                 </InfiniteScroll>
             </div>
@@ -121,7 +121,11 @@ class Latest extends Component {
     render() {
         return (
             <Container fluid className="animated fadeIn">
-                <h3>Últimas Propiedades cargadas</h3>
+                <Row>
+                    <Col>
+                        <h3>Últimas Propiedades cargadas</h3>
+                    </Col>
+                </Row>
                 {this.props.dwellings && this.renderContent()}
             </Container>
         );

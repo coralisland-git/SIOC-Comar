@@ -111,7 +111,7 @@ class Aside extends Component {
             characteristicsModal: false,
             servlegModal: false,
             orderByModal: false,
-            orderKey : 'newest'
+            orderKeyByDate : 'newest',
         };
         if (this.props.searchParams) {
             this.state = {
@@ -131,7 +131,10 @@ class Aside extends Component {
                     delete res.latitude;
                     delete res.formatted_address;
                     return res;
-                })}
+                }), selectedLocations : e.map(addr=>{
+                    let res = {...addr};
+                    return res;
+                })},
             })
         );
     }
@@ -159,16 +162,16 @@ class Aside extends Component {
                 );
             };
         }
-        if(this.state.orderKey == "cheapest") {
+        if(this.state.orderKeyByPrice == "cheapest") {
             this.props.dwellings.sort(compareValues('price'));
         }
-        if(this.state.orderKey == "expensive") {
+        if(this.state.orderKeyByPrice == "expensive") {
             this.props.dwellings.sort(compareValues('price', 'desc'));   
         }
-        if(this.state.orderKey == "newest") {
+        if(this.state.orderKeyByDate == "newest") {
             this.props.dwellings.sort(compareValues('createdAt', 'desc'));      
         }
-        if(this.state.orderKey == "oldest") {
+        if(this.state.orderKeyByDate == "oldest") {
             this.props.dwellings.sort(compareValues('createdAt')); 
         }
         this.setState({
@@ -176,10 +179,17 @@ class Aside extends Component {
         });
     }
 
-    removeTag(index) {
-        let tags = this.state.searchParams.address;
-        tags.splice(index, 1);
-        this.setState({searchParams: {...this.state.searchParams, address: tags}});
+    removeTag(type, index) {
+        if (type == 'loc' ) {
+            let tags = this.state.searchParams.address;
+            tags.splice(index, 1);
+            this.setState({searchParams: {...this.state.searchParams, address: tags}});
+        }
+        if (type == 'subtype') {
+            let tags = this.state.searchParams.subtype;
+            tags.splice(index, 1);
+            this.setState({searchParams: {...this.state.searchParams, subtype: tags}});
+        }
         this.props.requestFindDwellings(this.state.searchParams);
     }
 
@@ -285,7 +295,6 @@ class Aside extends Component {
     }
 
     handleSearch(modal) {
-        console.log(this.state.searchParams);
         this.props.requestFindDwellings(this.state.searchParams);
         this.setState({
             [modal]: !this.state[modal]
@@ -306,7 +315,6 @@ class Aside extends Component {
         // };
         const {dwellings} = this.props;
         const {searchParams} = this.state;
-        console.log(dwellings);
         return (
             <aside className="aside-menu">
                 <div className="tab-content b-column">
@@ -340,14 +348,24 @@ class Aside extends Component {
                                             <b>{dwellings.length}</b> en {searchParams.publicationType}
                                             <small>
                                                 { this.state.searchParams.address? this.state.searchParams.address.map((tag, i)=>(
-                                                    <Fragment>
-                                                        <span key={"tag"+i}>
+                                                    <Fragment key={"loc_tag"+i}>
+                                                        <span>
                                                             { tag.city }
-                                                            <FontAwesome name="close" onClick={ () => this.removeTag(i)}/>
+                                                            <FontAwesome name="close" onClick={ () => this.removeTag('loc', i)}/>
                                                         </span>
                                                     </Fragment>
                                                     )) : ''
                                                 }
+                                                { this.state.searchParams.subtype? this.state.searchParams.subtype.map((subtype, i)=>(
+                                                    <Fragment key={"subtype_tag"+i}>
+                                                        <span>
+                                                            { subtype }
+                                                            <FontAwesome name="close" onClick={ () => this.removeTag('subtype', i)}/>
+                                                        </span>
+                                                    </Fragment>
+                                                    )) : ''
+                                                }
+                                                
                                             </small> 
                                         </h3>
                                     </div>
@@ -355,26 +373,33 @@ class Aside extends Component {
                                 </div>
                             </div>
                             <div className="inner-tab-content-scroll">
-                                {map(this.props.dwellings, (dwelling, index) => (
+                                {map(this.props.dwellings, (dwelling, index) => {
+                                    let img_url = dwelling.images[0] !== undefined
+                                                ? dwelling.images[0].secure_url.replace('/upload/', '/upload/w_335,q_auto,f_auto/')
+                                                : 'https://res.cloudinary.com/sioc/image/upload/w_335,q_auto,f_auto/v1525712940/epnvioppkpvwye1qs66z.jpg';
+                                    return (
                                     <div
                                         className="prop-detail"
                                         key={dwelling._id}
                                         onClick={() => this.props.history.push(`/propiedades/${dwelling._id}`)}
                                     >
-                                        <img
-                                            src={dwelling.images[0] !== undefined
-                                                ? dwelling.images[0].secure_url.replace('/upload/', '/upload/w_335,q_auto,f_auto/')
-                                                : 'https://res.cloudinary.com/sioc/image/upload/w_335,q_auto,f_auto/v1525712940/epnvioppkpvwye1qs66z.jpg'}
-                                            alt=""
-                                        />
+                                        <div className="img" style={{width: '350px', height: '200px', backgroundSize: 'cover', backgroundImage: 'url("'+img_url+'")'}}></div>
                                         <div className="prop-text">
-                                            {dwelling.price
-                                                ? <span>{dwelling.currency}{dwelling.price}</span>
-                                                : <span>Consulte</span>}
-                                            <p>
-                                                {dwelling.address.streetName} {dwelling.address.streetNumber}, {dwelling.address.city}, {dwelling.address.state}
-                                            </p>
-                                            <small>#{dwelling.siocId}</small>
+                                            <span>
+                                                {dwelling.subtype} en {dwelling.address.streetName},{dwelling.address.city}
+                                            </span>
+                                            <Row>
+                                                <Col sm={12} style={{padding: '0'}}>
+                                                    <div className="pull-left">
+                                                        {dwelling.price
+                                                        ? <p>{dwelling.currency}<b>{dwelling.price}</b></p>
+                                                        : <p>Consulte</p>}
+                                                    </div>
+                                                    <div className="pull-right">
+                                                        <p>#{dwelling.siocId}</p>        
+                                                    </div>
+                                                </Col>
+                                            </Row>
                                         </div>
                                         <div className="prop-detail-btns">
                                             <Button
@@ -397,7 +422,7 @@ class Aside extends Component {
                                             </Button>
                                         </div>
                                     </div>
-                                ))}
+                                )})}
                             </div>
                         </div>
                     </div>
@@ -443,14 +468,12 @@ class Aside extends Component {
                                     <FormGroup>
                                         <ButtonGroup className="btn-justified">
                                             <Button
-                                                color="primary"
                                                 outline
                                                 onClick={() => this.handleType('publicationType', 'Alquiler')}
                                                 active={searchParams.publicationType === 'Alquiler'}
                                             >ALQUILER
                                             </Button>
                                             <Button
-                                                color="primary"
                                                 outline
                                                 onClick={() => this.handleType('publicationType', 'Venta')}
                                                 active={searchParams.publicationType === 'Venta'}
@@ -464,7 +487,7 @@ class Aside extends Component {
                             <Row>
                                 <Col sm={12}>
                                     <FormGroup>
-                                      <MultipleSearchBox onChange={e => this.handleAddress(e)}/>
+                                      <MultipleSearchBox onChange={e => this.handleAddress(e)} value={ this.props.searchParams? this.props.searchParams.selectedLocations : [] }/>
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -489,19 +512,16 @@ class Aside extends Component {
                                     <FormGroup>
                                         <ButtonGroup className="btn-justified">
                                             <Button
-                                                color="primary"
                                                 outline
-                                                onClick={() => this.handleType('publicationType', 'Alquiler')}
-                                                active={searchParams.publicationType === 'Alquiler'}
+                                                onClick={() => this.handleType('currency', 'pesos')}
+                                                active={searchParams.currency === 'pesos'}
                                             >Pesos
                                             </Button>
                                             <Button
-                                                color="primary"
                                                 outline
-                                                onClick={() => this.handleType('publicationType', 'Venta')}
-                                                active={searchParams.publicationType === 'Venta'}
-                                            >
-                                                Dolares
+                                                onClick={() => this.handleType('currency', 'dolares')}
+                                                active={searchParams.currency === 'dolares'}
+                                            >Dolares
                                             </Button>
                                         </ButtonGroup>
                                     </FormGroup>
@@ -1546,35 +1566,52 @@ class Aside extends Component {
                     <ModalHeader toggle={() => this.toggleModals('orderByModal')}>Ordenar por</ModalHeader>
                     <ModalBody>
                         <Row>
-                            <Col>
+                            <Col sm={12}>
+                                <h4>Precio</h4>
                                 <ButtonGroup className="d-flex">
                                     <Button 
                                         outline
-                                        onClick={ e => { this.setState({ orderKey: 'cheapest'}) }} 
-                                        active={this.state.orderKey === 'cheapest'}
-                                    >Cheapest
+                                        onClick={ e => { this.setState({ orderKeyByPrice: 'cheapest'}) }} 
+                                        active={this.state.orderKeyByPrice === 'cheapest'}
+                                    >Menor Precio
                                     </Button>
                                     <Button
                                         outline
-                                        onClick={ e => { this.setState({ orderKey: 'expensive'}) }}
-                                        active={this.state.orderKey === 'expensive'}
-                                    >More Expensive
+                                        onClick={ e => { this.setState({ orderKeyByPrice: 'expensive'}) }}
+                                        active={this.state.orderKeyByPrice === 'expensive'}
+                                    >Mayor Precio
                                     </Button>
                                 </ButtonGroup>        
                             </Col>
-                            <Col>
+                            <div className="padding-sm"></div>
+                            <Col sm={12}>
+                                <h4>Antiguedad de la publicación</h4>
                                 <ButtonGroup className="d-flex">
                                     <Button
                                         outline
-                                        onClick={ e => { this.setState({ orderKey: 'newest'}) }}
-                                        active={this.state.orderKey === 'newest'}
-                                    >Newest uploaded
+                                        onClick={ e => { this.setState({ orderKeyByDate: 'newest'}) }}
+                                        active={this.state.orderKeyByDate === 'newest'}
+                                    >Subidas Recientes
                                     </Button>
                                     <Button
                                         outline
-                                        onClick={ e => { this.setState({ orderKey: 'oldest'}) }}
-                                        active={this.state.orderKey === 'oldest'}
-                                    >Oldest uploaded
+                                        onClick={ e => { this.setState({ orderKeyByDate: 'oldest'}) }}
+                                        active={this.state.orderKeyByDate === 'oldest'}
+                                    >Subidas mas antiguas
+                                    </Button>
+                                </ButtonGroup>
+                            </Col>
+                            <div className="padding-sm"></div>
+                            <Col sm={12}>
+                                <h4>Filtro para inmobiliarias</h4>
+                                <ButtonGroup className="d-flex">
+                                    <Button
+                                        outline
+                                    >Mostrar sólo de mi inmobiliaria
+                                    </Button>
+                                    <Button
+                                        outline
+                                    >De todo el SIOC
                                     </Button>
                                 </ButtonGroup>
                             </Col>

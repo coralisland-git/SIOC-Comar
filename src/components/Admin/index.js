@@ -7,6 +7,7 @@ import Dashboard from './Dashboard/Dashboard';
 
 import SearchClients from './Clients/Search';
 import NewClient from './Clients/New';
+import EditClient from './Clients/Edit';
 
 import Dwellings from './Dwellings';
 
@@ -21,6 +22,8 @@ import Auctioneers from './Auctioneers';
 import Sellers from './Sellers';
 import Captains from './Captains';
 
+import '../../sass/admin.scss';
+
 const Admin = ({match: {path}}) => (
     <Switch>
         <Route path={`${path}/dashboard/Dashboard`} name="Dashboard" component={Dashboard} exact/>
@@ -29,6 +32,7 @@ const Admin = ({match: {path}}) => (
         <Route path={`${path}/dwellings`} component={Dwellings}/>
 
         <Route path={`${path}/clients/new`} name="New" component={NewClient} exact/>
+        <Route path={`${path}/clients/Edit`} name="Edit" component={EditClient} exact/>
         <Route path={`${path}/clients/search`} name="Search" component={SearchClients} exact/>
 
         <Route path={`${path}/team/add`} name="Add" component={AddTeam} exact/>

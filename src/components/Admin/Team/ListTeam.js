@@ -32,24 +32,25 @@ class ListTeam extends Component {
     renderContent() {
         const {agencies} = this.props;
         return (
-            <ListGroup>
+            <div>
                 {agencies.map((agency, index) => (
+                <ListGroup className="inmobs" >
                     <ListGroupItem
                         key={agency._id}
-                        active
                         tag="button"
                         action
                         onClick={() => this.toggleCollapse(index)}
                     >
-                        <b>{agency.name ? agency.name : 'Inmobiliaria sin Nombre'}</b>
-                        <Collapse isOpen={this.state[index]} style={{padding: '25px'}}>
+                        <h4 className="title">{agency.name ? agency.name : 'Inmobiliaria sin Nombre'}</h4>
+                        <Collapse className="animated fadeIn" isOpen={this.state[index]}>
+                            <hr/>
                             <Row>
                                 <Col sm="12">
-                                    Martillero
+                                    <p>Martillero</p>
                                     <h3>{agency.auctioneer ? agency.auctioneer.label : 'No posee'}</h3>
                                 </Col>
                                 <Col sm="4">
-                                    Dirección
+                                    <p>Dirección</p>
                                     <h4>{agency.address ?
                                         <Fragment>
                                             {agency.address.streetName},{ }
@@ -59,27 +60,28 @@ class ListTeam extends Component {
                                     </h4>
                                 </Col>
                                 <Col sm="4">
-                                    Tel
+                                    <p>Tel</p>
                                     <h4>{agency.phone ? agency.phone : 'Desconocido'}</h4>
                                 </Col>
                                 <Col sm="4">
-                                    Email
+                                    <p>Email</p>
                                     <h4>{agency.email ? agency.email : 'Desconocido'}</h4>
                                 </Col>
                                 <Col sm="12">
-                                    Capitán
+                                    <p>Capitán</p>
                                     <h4>{agency.captain ? agency.captain.label : 'No posee'}</h4>
                                 </Col>
                                 <Col sm="12">
-                                    Vendedores
+                                    <p>Vendedores</p>
                                     <h4>Nombre 1, Nombre2, NombreN</h4>
                                 </Col>
                             </Row>
+                            <hr/>
                         </Collapse>
                     </ListGroupItem>
-
+                </ListGroup> 
                 ))}
-            </ListGroup>
+            </div>
         );
     }
 

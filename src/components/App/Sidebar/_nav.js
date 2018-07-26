@@ -28,12 +28,12 @@ export default {
             ]
         },
         {
-            name: 'Propiedades',
+            name: 'Mis Propiedades',
             url: '/admin/dwellings',
             icon: 'icon-home',
             children: [
                 {
-                    name: 'Buscar',
+                    name: 'Buscar Propiedades',
                     url: '/admin/dwellings/search',
                     icon: 'icon-magnifier'
                 },
@@ -100,7 +100,7 @@ export default {
             icon: 'icon-layers',
             children: [
                 {
-                    name: 'Nueva Inmobiliaria',
+                    name: 'Agregar Inmobiliaria',
                     url: '/admin/team/add',
                     icon: 'icon-pencil'
                 },
@@ -108,10 +108,21 @@ export default {
                     name: 'Inmobiliarias',
                     url: '/admin/team/list',
                     icon: 'icon-magnifier'
-                },
+                }
+            ]
+        },
+        {
+            name: 'Usuarios',
+            icon: 'icon-layers',
+            children: [
                 {
                     name: 'Martilleros',
                     url: '/admin/auctioneers/auctioneers',
+                    icon: 'icon-pencil'
+                },
+                {
+                    name: 'Capitanes',
+                    url: '/admin/captains/captains',
                     icon: 'icon-pencil'
                 },
                 {
@@ -120,17 +131,11 @@ export default {
                     icon: 'icon-pencil'
                 },
                 {
-                    name: 'Capitanes',
-                    url: '/admin/captains/captains',
-                    icon: 'icon-pencil'
+                    name: 'Usuarios',
+                    url: '/admin/users/list',
+                    icon: 'icon-layers',
                 }
-
             ]
-        },
-        {
-            name: 'Usuarios',
-            url: '/admin/users/list',
-            icon: 'icon-layers',
         }
     ],
     martillero: [

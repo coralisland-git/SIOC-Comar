@@ -9,64 +9,40 @@ import {
     FormGroup,
     Label,
     Input,
-    Button,
-    Alert
+    Button
 } from 'reactstrap';
-import {requestSearchUsers, clearUsers, requestSaveClient, requestUser, clearClientSaved} from '../../../actions';
+import {requestSaveClient, clearClientSaved} from '../../../actions';
 import Typeahead from '../../common/Typeahead';
 import GoogleSearchBox from '../../Maps/GoogleSearchBox';
 import {Client} from '../../../model/index';
 
-class New extends Component {
+class Edit extends Component {
     static propTypes = {
-        requestSearchUsers: PropTypes.func.isRequired,
         requestSaveClient: PropTypes.func.isRequired,
-        requestUser: PropTypes.func.isRequired,
         history: PropTypes.shape({
             push: PropTypes.func.isRequired
         }).isRequired,
-        clearUsers: PropTypes.func.isRequired,
-        clientUsersOptions: PropTypes.arrayOf(PropTypes.shape({})),
         client: PropTypes.shape({})
     };
 
     static defaultProps = {
-        client: new Client(),
-        clientUsersOptions: []
+        client: new Client()
     };
-
-    static getDerivedStateFromProps(props, prevState) {
-        if (prevState.first) {
-            return {first: false};
-        }
-
-        if (props.user) {
-            return {client: new Client({name: props.user.name, surname: props.user.surname, email: props.user.email})};
-        }
-
-        return null;
-    }
 
     constructor(props) {
         super(props);
         this.state = {
-            client: new Client(),
-            user: {}, 
-            first: true
+            client: new Client()
         };
     }
 
     componentDidMount() {
-        this.props.clearUsers();
-    }
-
-    handleChange(user) {
+        let birthdate = this.props.location.state.client.birthdate ? this.props.location.state.client.birthdate.slice(0,10) : '';
         this.setState(
             state => ({
-                user: {...state.user, user: user.value, label: user.label}
+                client: (Object.assign({},this.props.location.state.client, {birthdate}))
             })
         );
-        this.props.requestUser(user.value);
     }
 
     handleInput(e, id) {
@@ -88,8 +64,8 @@ class New extends Component {
     }
 
     render() {
-        const {clientUsersOptions, saved, unsaved} = this.props;
-        const {client, user} = this.state;
+        const {saved, unsaved} = this.props;
+        const {client} = this.state;
 
         if (saved) {
             this.props.clearClientSaved();
@@ -102,31 +78,15 @@ class New extends Component {
         }
 
         return (
-            <Container fluid className="animated fadeIn">
-                <h2>Crear nuevo cliente</h2>
-                <Form
+            <Container className="animated fadeIn">
+                <Form 
+                    className="form" 
                     onSubmit={this.handleSubmit.bind(this)}>
                     <Row>
-                        <Col sm={6}>
-                            <Row>
-                                <Col>
-                                    <FormGroup>
-                                        <Typeahead
-                                            label="Crear de Usuario Existente"
-                                            control="users"
-                                            options={clientUsersOptions}
-                                            onLoadOptions={term => this.props.requestSearchUsers(term, 'usuario')}
-                                            placeholder="Seleccione usuario"
-                                            value={user ? user : ''}
-                                            onChange={params => this.handleChange(params)}
-                                            removeSelected
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
+                        <Col sm="12">
+                            <h2 className="pull-left">Editar Cliente</h2>
                         </Col>
                     </Row>
-                    <hr/>
                     <Row>
                         <Col sm={6}>
                             <Row>
@@ -276,43 +236,39 @@ class New extends Component {
                                 </Col>
                             </Row>
                         </Col>
-                    </Row>
-                    <Row>
                         <Col sm={12}>
-                            <Row>
-                                <Col>
-                                    <FormGroup>
-                                        <Label>Observacioness</Label>
-                                        <Input
-                                            type="textarea"
-                                            value={client.observations}
-                                            onChange={e => this.handleInput(e.target.value, 'observations')}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
+                            <FormGroup>
+                                <Label>Observacioness</Label>
+                                <Input
+                                    type="textarea"
+                                    value={client.observations}
+                                    onChange={e => this.handleInput(e.target.value, 'observations')}
+                                />
+                            </FormGroup>
                         </Col>
                     </Row>
-
                     {this.state.unsaved&&
                     <Row>
                         <Alert color="danger">
-                            El e-mail ingresado ya existe.
+                            Email already exists
                         </Alert>
                     </Row>}
-                    <div className="padding-sm"></div>
                     <Row>
-                        <Col sm={12}>
-                            <Row>
-                                <Col>
-                                    <Button
-                                        className="pull-right"
-                                    >
-                                        Guardar
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </Col>
+                        <div className="pull-right">
+                            <Button
+                                type="submit"
+                            >
+                                Guardar
+                            </Button>
+                        </div>
+                        <div className="pull-right">
+                            <Button style={{marginLeft: '10px'}}
+                                color="second"
+                                onClick={() => this.props.history.push('/admin/clients/search')}
+                            >
+                                Volver
+                            </Button>
+                        </div>
                     </Row>
                 </Form>
             </Container>
@@ -322,17 +278,12 @@ class New extends Component {
 
 export default connect(
     state => ({
-        clientUsersOptions: state.user.clientUsersOptions,
-        user: state.user.user, 
         saving: state.client.saving,
         saved: state.client.saved,
         unsaved: state.client.unsaved
     }),
     dispatch => ({
-        requestSearchUsers: (term, userType) => dispatch(requestSearchUsers(term, userType)),
         requestSaveClient: client => dispatch(requestSaveClient(client)),
-        requestUser: user => dispatch(requestUser(user)),
-        clearUsers: () => dispatch(clearUsers()),
         clearClientSaved: () => dispatch(clearClientSaved())
     })
-)(New);
+)(Edit);

@@ -112,7 +112,6 @@ class GoogleSearchBox extends Component {
     render() {
         let address;
         let formattedAddress;
-        console.log(this.props);
         if (this.props.address !== undefined) {
             address = this.props.address;
             formattedAddress = `${address.streetName ? address.streetName : ''} ${address.streetNumber ? address.streetNumber : ''} ${address.city}, ${address.state}`;

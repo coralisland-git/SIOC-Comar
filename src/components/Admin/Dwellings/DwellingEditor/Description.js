@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import {
     Grid,
-    Row,
-    Col,
     FormControl,
-    FormGroup,
-    Button,
-    ButtonToolbar
 } from 'react-bootstrap';
+import {
+    Row, 
+    Col, 
+    FormGroup, 
+    Button
+} from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -190,11 +191,10 @@ class Description extends Component {
                         <h2>Carga de Imágenes </h2>
 
                         <Dropzone
-
                             onDrop={this.onImageDrop.bind(this)}
                             multiple={true}
                             accept="image/*">
-                            <div>Drop an image or click to select a file to upload.</div>
+                            <div>Arrastrá una imagen hasta aquí o hacé click para seleccionar un archivo.</div>
                         </Dropzone>
 
                         {dwelling.images.length!==0 &&
@@ -206,7 +206,9 @@ class Description extends Component {
                                             style={getListStyle(snapshot.isDraggingOver)}
                                             {...provided.droppableProps}
                                         >
-                                            {dwelling.images.map((newImage, index) => (
+                                            {dwelling.images.map((newImage, index) => {
+                                                let img_url = newImage.secure_url.replace('/upload/', '/upload/w_200,q_auto,f_auto/');
+                                                return (
                                                 <Draggable key={newImage.public_id} draggableId={newImage.public_id} index={index}>
                                                     {(provided, snapshot) => (
                                                         <div
@@ -218,7 +220,7 @@ class Description extends Component {
                                                                 provided.draggableProps.style
                                                             )}
                                                         >
-                                                            <img src={newImage.secure_url.replace('/upload/', '/upload/w_200,q_auto,f_auto/')} alt="" style={{ marginLeft: '30px' }} width="auto" height="140"/>
+                                                            <div className="img" style={{float: 'left', marginRight: '5px', width: '180px', height: '160px', backgroundSize: 'cover', backgroundImage: 'url("'+img_url+'")'}}></div>
                                                             <Button
                                                                 id={newImage.delete_token}
                                                                 bsSize="lg"
@@ -229,6 +231,7 @@ class Description extends Component {
                                                                     width: '16px',
                                                                     height: '16px'
                                                                 }}
+                                                                style={{marginTop: '60px'}}
                                                                 onClick={e => this.onHandleDeleteImg(e, index)}
                                                             >
                                                                 Borrar
@@ -236,7 +239,7 @@ class Description extends Component {
                                                         </div>
                                                     )}
                                                 </Draggable>
-                                            ))}
+                                            )})}
                                             {provided.placeholder}
                                         </div>
                                     )}
@@ -247,16 +250,13 @@ class Description extends Component {
                     </Col>
 
                 </Row>
+                <div className="padding-sm"></div>
                 <Row>
                     <Col sm={6}>
-                        <ButtonToolbar className="pull-left">
-                            <Button onClick={() => this.props.history.push('/admin/dwellings/characteristics')}>Atrás</Button>
-                        </ButtonToolbar>
+                        <Button color="white" className="pull-left" onClick={() => this.props.history.push('/admin/dwellings/characteristics')}>Atrás</Button>
                     </Col>
                     <Col sm={6}>
-                        <ButtonToolbar className="pull-right">
-                            <Button onClick={() => this.handleSubmit()}>Guardar</Button>
-                        </ButtonToolbar>
+                        <Button className="pull-right" onClick={() => this.handleSubmit()}>Guardar</Button>
                     </Col>
                 </Row>
             </Grid>

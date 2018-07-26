@@ -58,6 +58,10 @@ p {
   padding: 60px;
 }
 
+.padding-sm {
+  padding: 2%;
+}
+
 .bg-app {
   min-height: 350px;
   padding-top: 15px;
@@ -130,6 +134,9 @@ p {
         font-size: 50px;
         letter-spacing: -2px;
         margin: 25px 0;
+        small {
+          font-size: 70%
+        }
       }
       .head-pre {
         font-size: 12px;
@@ -219,58 +226,71 @@ p {
 }
 
 .highlights {
-  padding: 80px 0;
+  padding: 20px 0;
   hr {
     margin: 30px 0;
   }
-  .highlight-box {
-    overflow: hidden;
-    position: relative;
-    display: block;
-    min-width: 0;
-    flex-direction: column;
-    margin: 0 0 20px;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid #c2cfd6;
-    background-color: #f8f8f8;
-    border-bottom: 1px solid #dfdfdf;
-    cursor: pointer;
-    
-    .prop-detail-btns {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      .btn {
-        font-size: 18px;
-        background: transparent;
-        border: none;
-      }
-      .like {
-        transition: all 1s;
-        .fa { color: #fff; }
-        .fa:hover {
-          color:red;
+  .highlights-main {
+    padding: 0 7px;
+    .prop-listing-margin-fix {
+      padding: 8px;
+    }
+    .highlight-box {
+      overflow: hidden;
+      position: relative;
+      display: block;
+      min-width: 0;
+      flex-direction: column;
+      // margin: 0 0 20px;
+      word-wrap: break-word;
+      background-color: #fff;
+      background-clip: border-box;
+      border: 1px solid #c2cfd6;
+      border-radius: 0.25rem;
+      background-color: #f8f8f8;
+      border-bottom: 1px solid #dfdfdf;
+      cursor: pointer;
+      
+      .prop-detail-btns {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        .btn {
+          font-size: 18px;
+          background: transparent;
+          border: none;
+        }
+        .like {
+          transition: all 1s;
+          .fa { color: #fff; }
+          .fa:hover {
+            color:red;
+          }
         }
       }
-    }
-    img {
-      min-width: 100%;
-      height: 300px;
-      width: auto;      
-    }
-    .highlight-body {
-      position: absolute;
-      bottom: 15px;
-      h3, h4, span { 
-        color: #fff;
+      img {
+        min-width: 100%;
+        height: 300px;
+        width: auto;      
       }
-      h3, h4 { 
-        font-weight: 700;
-        text-shadow: 2px 1px rgba(0, 0, 0, 0.5); 
+      .highlight-body {
+        position: absolute;
+        bottom: 15px;
+        h3, h4, span { 
+          color: #fff;
+        }
+        h3, h4 { 
+          font-weight: 700;
+          text-shadow: 2px 1px rgba(0, 0, 0, 0.5); 
+        }
+        h4 { 
+          margin: 0;
+          small {
+            font-size: 80%;
+          }
+        }
+        h3 { line-height: 1 }
       }
-      h3 { margin: 0 }
     }
   }
 }

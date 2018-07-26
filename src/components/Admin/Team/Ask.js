@@ -62,7 +62,7 @@ export default class ListTeam extends React.Component {
 		                    <Col sm="12">
 		                        <ListGroup>
 		                            <ListGroupItem active tag="button" action onClick={this.toggleCollapse}>
-		                                Fecha/hora - <b>Dirección</b> - <em>Estado (Solicitada/Confirmada)</em>
+		                                Fecha/hora - <em>Dirección</em> - <b>Cod. 321321</b>
 		                                <Collapse isOpen={this.state.collapse} style={{ padding: '25px'}}>
 		                                    <Row>
 		                                    	<Col sm="12"><hr/></Col>
@@ -87,8 +87,8 @@ export default class ListTeam extends React.Component {
 		                                            <h4>cliente perez</h4>
 		                                        </Col>
 		                                        <Col sm="3">
-		                                            Código
-		                                            <h4>321321</h4>
+		                                            Prop. Cargada por
+		                                            <h4>nombre del que cargó la ficha</h4>
 		                                        </Col>
 		                                        <Col sm="12"><hr/></Col>
 		                                        <Col sm="12" className="clearfix">

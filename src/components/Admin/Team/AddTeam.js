@@ -80,6 +80,7 @@ class AddTeam extends Component {
                     <Col sm={12}>
                         <h2>Crear Inmobiliaria</h2>
                     </Col>
+                    <div className="padding-sm"></div>
                     <Col sm={12}>
                         <FormGroup>
                             <Label>Nombre de Inmobiliaria</Label>
@@ -91,47 +92,49 @@ class AddTeam extends Component {
                             />
                         </FormGroup>
                     </Col>
-                    <Col sm={3}>
-                        <FormGroup>
-                            <GoogleSearchBox
-                                address={agency.address}
-                                onChange={e => this.handleToggle(e, 'address')}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col sm={3}>
-                        <FormGroup>
-                            <Label>E-mail</Label>
-                            <Input
-                                type="email"
-                                placeholder="Ingrese Email de la inmobiliaria"
-                                value={agency.email}
-                                onChange={e => this.handleToggle(e.target.value, 'email')}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col sm={2}>
-                        <FormGroup>
-                            <Label>Whatsapp</Label>
-                            <Input
-                                type="number"
-                                placeholder="Ingrese Whatsapp de la inmobiliaria"
-                                value={agency.whatsapp}
-                                onChange={e => this.handleToggle(e.target.value, 'whatsapp')}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col sm={2}>
-                        <FormGroup>
-                            <Label>Teléfono</Label>
-                            <Input
-                                type="phone"
-                                placeholder="Ingrese Teléfono de la inmobiliaria"
-                                value={agency.phone}
-                                onChange={e => this.handleToggle(e.target.value, 'phone')}
-                            />
-                        </FormGroup>
-                    </Col>
+                    
+                        <Col sm={3}>
+                            <FormGroup>
+                                Dirección
+                                <GoogleSearchBox
+                                    address={agency.address}
+                                    onChange={e => this.handleToggle(e, 'address')}
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col sm={3}>
+                            <FormGroup>
+                                <Label>E-mail</Label>
+                                <Input
+                                    type="email"
+                                    placeholder="Ingrese Email de la inmobiliaria"
+                                    value={agency.email}
+                                    onChange={e => this.handleToggle(e.target.value, 'email')}
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col sm={3}>
+                            <FormGroup>
+                                <Label>Whatsapp</Label>
+                                <Input
+                                    type="number"
+                                    placeholder="Ingrese Whatsapp de la inmobiliaria"
+                                    value={agency.whatsapp}
+                                    onChange={e => this.handleToggle(e.target.value, 'whatsapp')}
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col sm={3}>
+                            <FormGroup>
+                                <Label>Teléfono</Label>
+                                <Input
+                                    type="phone"
+                                    placeholder="Ingrese Teléfono de la inmobiliaria"
+                                    value={agency.phone}
+                                    onChange={e => this.handleToggle(e.target.value, 'phone')}
+                                />
+                            </FormGroup>
+                        </Col>
                     <Col sm={6}>
                         <FormGroup>
                             <Typeahead
@@ -165,13 +168,16 @@ class AddTeam extends Component {
                         ...
                     </Col>
                 </Row>
+                <div className="padding-sm"></div>
                 <Row>
-                    <Button
-                        color="primary"
-                        onClick={() => this.handleSubmit()}
-                    >
-                        Guardar
-                    </Button>
+                    <Col>
+                        <Button
+                            className="pull-right"
+                            onClick={() => this.handleSubmit()}
+                        >
+                            Guardar
+                        </Button>
+                    </Col>
                 </Row>
             </Container>
         );

@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unused-prop-types */
 import React, {Component} from 'react';
+import Select from 'react-select';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import FontAwesome from 'react-fontawesome';
@@ -20,7 +21,7 @@ import {
     Tooltip
 } from 'reactstrap';
 
-import {requestSearchUsers, savePartialDwelling} from '../../../../actions/index';
+import {requestSearchClients, savePartialDwelling, requestAgencies} from '../../../../actions/index';
 import GoogleSearchBox from '../../../Maps/GoogleSearchBox';
 import {Dwelling} from '../../../../model/index';
 import Typeahead from '../../../common/Typeahead';
@@ -31,7 +32,9 @@ class General extends Component {
         history: PropTypes.shape({
             push: PropTypes.func.isRequired
         }).isRequired,
-        dwelling: PropTypes.shape({})
+        dwelling: PropTypes.shape({}),
+        agencies: PropTypes.arrayOf(PropTypes.shape({}))
+
     };
 
     static defaultProps = {
@@ -47,6 +50,10 @@ class General extends Component {
         if (this.props.dwelling) {
             this.state = this.props;
         }
+    }
+
+    componentDidMount() {
+        this.props.requestAgencies();
     }
 
     componentWillUnmount() {
@@ -134,10 +141,18 @@ class General extends Component {
         this.props.history.push('/admin/dwellings/characteristics');
     }
 
-    handleTypeahead(user) {
+    handleTypeahead(client) {
         this.setState(
             state => ({
-                user: {...state.user, user: user.value, label: user.label}
+                client: {...state.client, client: client.value, label: client.label}
+            })
+        );
+    }
+
+    handleSelect(e) {
+        this.setState(
+            state => ({
+                dwelling: {...state.dwelling, agency: e.value}
             })
         );
     }
@@ -161,8 +176,29 @@ class General extends Component {
         if (!this.state.dwelling.type) {
             this.state.dwelling.type = 'Residencial';
         }
-        const {dwelling, user} = this.state;
-        const {clientUsersOptions} = this.props;
+        const {dwelling, client} = this.state;
+        const {clientsOptions} = this.props;
+        let AgencyOptions = [];
+
+        if (this.props.agencies){
+        
+            for (let i=0;i<this.props.agencies.length;i++){
+
+                let item = {
+                    value : this.props.agencies[i]._id,
+                    label : this.props.agencies[i].name
+                }
+
+                if (this.props.userProfile && (this.props.userProfile.role == 'admin' 
+                    || (this.props.agencies[i].auctioneer.user.role && this.props.userProfile.role != 'user'
+                    && this.props.userProfile.role == this.props.agencies[i].auctioneer.user.role) ))
+                {
+                    AgencyOptions.push(item);
+                }
+
+            }
+        }
+
         return (
             <Container className="animated fadeIn">
                 <Row>
@@ -189,18 +225,28 @@ class General extends Component {
                         </ol>
                     </Col>
                 </Row>
+                <div className="padding-sm"></div>
                 <Row>
-                    <Col sm={12}>
+                    <Col sm={6}>
                         <FormGroup>
                             <Typeahead
                                 label=""
-                                control="users"
-                                options={clientUsersOptions}
-                                onLoadOptions={term => this.props.requestSearchUsers(term, 'usuario')}
+                                control="clientes"
+                                options={clientsOptions}
+                                onLoadOptions={term => this.props.requestSearchClients(term)}
                                 placeholder="Seleccione Cliente"
-                                value={user ? user : ''}
+                                value={client ? client : ''}
                                 onChange={params => this.handleTypeahead(params)}
                                 removeSelected
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col sm={6}>
+                        <FormGroup>
+                            <Select
+                                options={AgencyOptions}
+                                placeholder="Seleccione Inmobiliaria"
+                                onChange={e => this.handleSelect(e)}
                             />
                         </FormGroup>
                     </Col>
@@ -350,9 +396,11 @@ class General extends Component {
                         </FormGroup>
                     </Col>
                 </Row>
+                <div className="padding-sm"></div>
                 <Row>
                     <Col sm={12}>
-                        <ButtonToolbar className="pull-right">
+                        
+                        <div className="pull-right">
                             <Tooltip
                                 placement="top"
                                 isOpen={this.state.tooltipOpen}
@@ -361,16 +409,14 @@ class General extends Component {
                             >
                                 Complete todos los campos para continuar
                             </Tooltip>
+                            <span id="Next"><FontAwesome name="question"/>&nbsp;&nbsp;</span>
                             <Button
-                                color="primary"
                                 disabled={!(dwelling.address.streetName && dwelling.subtype)}
                                 onClick={() => this.handleSubmit()}
                             >
-                                <span id="Next"><FontAwesome name="question"/>&nbsp;&nbsp;</span>
                                 Siguiente
                             </Button>
-
-                        </ButtonToolbar>
+                        </div>
                     </Col>
                 </Row>
             </Container>
@@ -380,11 +426,14 @@ class General extends Component {
 
 export default connect(
     state => ({
-        clientUsersOptions: state.user.clientUsersOptions,
-        dwelling: state.dwelling.dwelling
+        clientsOptions: state.client.clientsOptions,
+        dwelling: state.dwelling.dwelling,
+        agencies: state.agency.agencies,
+        userProfile: state.user.userProfile
     }),
     dispatch => ({
-        requestSearchUsers: (term, userType) => dispatch(requestSearchUsers(term, userType)),
-        savePartialDwelling: dwelling => dispatch(savePartialDwelling(dwelling))
+        requestSearchClients: (term) => dispatch(requestSearchClients(term)),
+        savePartialDwelling: dwelling => dispatch(savePartialDwelling(dwelling)),
+        requestAgencies: () => dispatch(requestAgencies())
     })
 )(General);

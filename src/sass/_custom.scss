@@ -66,6 +66,11 @@ label {
   margin-left: 0;
 }
 
+.container-fluid {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
 // Solution scroll horizontal
 @media (min-width: 768px) {
   .container {

@@ -6,7 +6,7 @@
   flex-direction: column;
   padding: $sidebar-padding;
   color: $sidebar-color;
-  background: $gray-900;
+  background: $sidebar-bg;
   @include borders($sidebar-borders);
 
   .sidebar-close {
@@ -34,6 +34,11 @@
     font-weight: bold;
     text-transform: uppercase;
     // background: $sidebar-header-bg;
+    .sidebar-header-info {
+      color: #fff;
+      font-weight: normal;
+      text-transform: none;
+    }
   }
 
   .sidebar-form .form-control {
@@ -103,7 +108,7 @@
 
   .nav-dropdown-items {
     max-height: 0;
-    padding: 0;
+    padding: 0 0 0 15px;
     margin: 0;
     overflow-y: hidden;
     transition: max-height .3s ease-in-out;

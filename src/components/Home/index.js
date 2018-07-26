@@ -29,7 +29,7 @@ class Home extends Component {
     handleSearch(searchParams) {
         if (!searchParams) return;
         this.props.requestFindDwellings(searchParams);
-        this.props.history.push('/resultados/');
+        this.props.history.push({pathname:'/resultados/'});
     }
 
     render() {
@@ -37,7 +37,7 @@ class Home extends Component {
             <div>
                 <Splash onChange={e => this.handleSubmit(e)} onSearch={e => this.handleSearch(e)}/>
                 <Search/>
-                <Intro/>
+                <Intro />
                 <Footer/>
             </div>
         );
@@ -45,7 +45,10 @@ class Home extends Component {
 }
 
 export default connect(
-    null,
+    state => ({
+        dwellings: state.dwelling.searchedDwellings,
+        searchParams: state.dwelling.searchParams
+    }),
     dispatch => ({
         requestFindDwellings: searchParams => dispatch(requestFindDwellings(searchParams))
     })

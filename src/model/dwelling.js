@@ -15,6 +15,7 @@ export default class Dwelling {
     images = [];
     generalDescription= '';
     privateDescription= '';
+    agency = '';
     constructor(obj) {
         Object.assign(this, obj);
     }

@@ -13,13 +13,18 @@ import {
     LOAD_MORE_DWELLINGS_FETCH_REQUESTED,
     AGENCY_SAVE_REQUESTED,
     AGENCY_FETCH_REQUESTED,
-    USER_FETCH_REQUESTED
+    USER_FETCH_REQUESTED,
+    CLIENT_SAVE_REQUESTED,
+    CLIENT_FETCH_REQUESTED,
+    CLIENT_DELETE_REQUESTED,
+    CLIENT_SEARCH_REQUESTED
 
 } from '../actions';
 import {saveDwelling, fetchDwellings, findDwelling, searchDwellings, fetchLoadMoreDwellings} from './dwelling';
 import {signOut} from './session';
 import {saveAgency, fetchAgencies} from './agency';
 import {fetchUserProfile, saveUser, fetchUsersByRole, searchUsers, changeUserRole, fetchUser} from './user';
+import {saveClient, fetchClients, deleteClient, searchClients} from './client';
 
 export default function* root() {
     yield [
@@ -36,6 +41,10 @@ export default function* root() {
         takeEvery(LOAD_MORE_DWELLINGS_FETCH_REQUESTED, fetchLoadMoreDwellings),
         takeEvery(AGENCY_SAVE_REQUESTED, saveAgency),
         takeEvery(AGENCY_FETCH_REQUESTED, fetchAgencies),
-        takeEvery(USER_FETCH_REQUESTED, fetchUser)
+        takeEvery(USER_FETCH_REQUESTED, fetchUser),
+        takeEvery(CLIENT_SAVE_REQUESTED, saveClient),
+        takeEvery(CLIENT_FETCH_REQUESTED, fetchClients),
+        takeEvery(CLIENT_DELETE_REQUESTED, deleteClient),
+        takeEvery(CLIENT_SEARCH_REQUESTED, searchClients)
     ];
 }

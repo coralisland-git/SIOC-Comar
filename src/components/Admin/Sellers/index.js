@@ -112,7 +112,6 @@ class Sellers extends Component {
     render() {
         const {usersOptions} = this.props;
         const {searchParams} = this.state;
-        console.log(this.state);
         return (
             <Container fluid className="animated fadeIn">
                 <Row>

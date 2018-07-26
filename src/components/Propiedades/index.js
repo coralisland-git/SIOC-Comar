@@ -125,7 +125,7 @@ class Propiedades extends Component {
                             <div className="head-main">
                                 <div className="price">
                                     {dwelling.price
-                                    ? <span><small>{dwelling.currency}$</small>{dwelling.price}</span>
+                                    ? <span><small>{dwelling.currency}</small><b>{dwelling.price}</b></span>
                                     : <span>Consulte Precio</span>}
                                 </div>
                                 <div className="head-pre">
@@ -200,6 +200,11 @@ class Propiedades extends Component {
 
                         <Col sm={{size: 8, offset: 2}}>
                             <div className="pr-box text-center">
+                                <FontAwesome 
+                                    name="whatsapp" 
+                                    size="5x"
+                                    style={{ color: '#25d366' }}
+                                    />
                                 <h4>Escribinos ahora por whatsapp web:</h4>
                                 <h3>+54 9 221 593 67 73</h3>
                             </div>

@@ -81,7 +81,11 @@ class Appraisals extends Component {
                     />}
                 >
                     <Row>
-                        {this.state.items.map(dwelling => (
+                        {this.state.items.map(dwelling => {
+                            let img_url = dwelling.images[0] !== undefined 
+                                        ? dwelling.images[0].secure_url.replace('/upload/', '/upload/w_400,q_auto,f_auto/') 
+                                        : 'http://via.placeholder.com/330x220';
+                            return (
                             <Col sm="6" md="4" key={dwelling._id}>
                                 <div
                                     className="highlight-box"
@@ -90,11 +94,7 @@ class Appraisals extends Component {
                                     <div className="prop-detail-btns">
                                         <Button className="like"><FontAwesome name="heart" size="lg"/></Button>
                                     </div>
-                                    <img 
-                                        src={dwelling.images[0] !== undefined 
-                                            ? dwelling.images[0].secure_url.replace('/upload/', '/upload/w_400,q_auto,f_auto/') 
-                                            : 'http://via.placeholder.com/330x220'}
-                                    />
+                                    <div className="img" style={{width: '100%', height: '300px', backgroundSize: 'cover', backgroundImage: 'url("'+img_url+'")'}}></div>
                                     <Row className="highlight-body">
                                         <Col sm={12}>
                                             {dwelling.price
@@ -111,7 +111,7 @@ class Appraisals extends Component {
                                     </Row>
                                 </div>
                             </Col>
-                        ))}
+                        )})}
                     </Row>
                 </InfiniteScroll>
             </div>

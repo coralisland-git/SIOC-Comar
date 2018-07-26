@@ -1,0 +1,26 @@
+@import "palette";
+
+.inmobs {
+	margin-bottom: 5px;
+	.list-group-item {
+		background: #f1f1f1;
+		border: 0;
+		outline: none;
+	}
+	.title {
+		color: $azul-sioc;
+	}
+	.collapse {
+		p {
+			color: $azul-sioc;
+			margin-bottom: 0;
+		}
+	}
+}
+
+.img-dropzone {
+	border: 3px dotted $azul-sioc;
+	padding: 15px;
+	color: $azul-sioc;
+	cursor: pointer;
+}

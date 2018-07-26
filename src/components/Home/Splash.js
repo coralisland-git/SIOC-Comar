@@ -61,10 +61,11 @@ class Splash extends Component {
                 price: {
                     min: undefined,
                     max: undefined
-
                 },
-                publicationType : 'Alquiler'
-            }
+                publicationType : 'Venta',
+                currency : 'dolares',
+                selectedLocations : []
+            },
         };
     }
 
@@ -83,9 +84,13 @@ class Splash extends Component {
     }
 
     handleType(id, e) {
+        let c_type = 'pesos'
+        if (e == 'Venta') {
+            c_type = 'dolares'
+        }
         this.setState(
             state => ({
-                searchParams: (Object.assign(state.searchParams, {[id]: e}))
+                searchParams: (Object.assign(state.searchParams, {[id]: e, currency : c_type}))
             })
         );
     }
@@ -109,9 +114,13 @@ class Splash extends Component {
                     delete res.latitude;
                     delete res.formatted_address;
                     return res;
-                })}
+                }), selectedLocations : e.map(addr=>{
+                    let res = {...addr};
+                    return res;
+                })},
             })
         );
+
     }
 
     handlePrice({target: {id, value}}, type) {
@@ -132,41 +141,23 @@ class Splash extends Component {
 
     render() {
         if (this.state.searchParams.publicationType === undefined) {
-            this.state.searchParams.publicationType = 'Alquiler';
+            this.state.searchParams.publicationType = 'Venta';
         }
         return (
-            <Container fluid className="animated fadeIn landing">
-                <Row className="main">
-                    <Col sm={{size: 6, offset: 3}} className="text-center">
+            <Container className="animated fadeIn landing">
+                <div className="landing-overlay">{/*<div className="color-layer"></div>*/}</div>
+                <Row className="centered v-center">
+                    <Col sm={{size: 6}} className="text-center">
                         <img src={siocLogoInicio} alt="SIOC Logo"/>
-                        {/*<FormGroup>
-                            <InputGroup bsSize="large">
-                                <FormControl
-                                    className="home-search-input"
-                                    type="number"
-                                    placeholder="Código"
-                                    value={this.state.siocId}
-                                    maxLength={6}
-                                    onChange={e => this.handleChange(e)}
-                                    onKeyPress={e => this.handleKeyPress(e)}
-                                />
-                            </InputGroup>
-                        </FormGroup>*/}
                         <h3>
                             Miles de propiedades para <b>comprar</b>,
                             <br/> <b>vender</b> o <b>alquilar</b> están esperando tu decisión!
                         </h3>
                     </Col>
-                    <Col sm={{size: 6, offset: 3}}>
+                    <Col sm={{size: 6}}>
                         <Col sm={12}>
                             <FormGroup>
                                 <ButtonGroup className="d-flex">
-                                    <Button
-                                        outline
-                                        onClick={() => this.handleType('publicationType', 'Alquiler')}
-                                        active={this.state.searchParams.publicationType === 'Alquiler'}
-                                    >ALQUILER
-                                    </Button>
                                     <Button
                                         outline
                                         onClick={() => this.handleType('publicationType', 'Venta')}
@@ -174,13 +165,19 @@ class Splash extends Component {
                                     >
                                         VENTA
                                     </Button>
+                                    <Button
+                                        outline
+                                        onClick={() => this.handleType('publicationType', 'Alquiler')}
+                                        active={this.state.searchParams.publicationType === 'Alquiler'}
+                                    >ALQUILER
+                                    </Button>
                                 </ButtonGroup>
                             </FormGroup>
                         </Col>
 
                         <Col sm={12}>
                             <FormGroup>
-                                <MultipleSearchBox onChange={e => this.handleAddress(e)}/>
+                                <MultipleSearchBox onChange={e => this.handleAddress(e)} value={[]} />
                             </FormGroup>
                         </Col>
 
@@ -197,23 +194,7 @@ class Splash extends Component {
                         </Col>
 
                         <Row>
-                            <Col sm={2}>
-                                <ButtonGroup className="d-flex">
-                                    <Button 
-                                        outline 
-                                        onClick={() => this.handleType('publicationType', 'Alquiler')}
-                                        active={this.state.searchParams.publicationType === 'Alquiler'}
-                                    >$
-                                    </Button>
-                                    <Button
-                                        outline
-                                        onClick={() => this.handleType('publicationType', 'Venta')}
-                                        active={this.state.searchParams.publicationType === 'Venta'}
-                                    >US$
-                                    </Button>
-                                </ButtonGroup>    
-                            </Col>
-                            <Col sm={5}>
+                            <Col sm={6}>
                                 <FormGroup>
                                     <Input
                                         type="number"
@@ -224,7 +205,7 @@ class Splash extends Component {
                                     />
                                 </FormGroup>
                             </Col>
-                            <Col sm={5}>
+                            <Col sm={6}>
                                 <FormGroup>
                                     <Input
                                         type="number"

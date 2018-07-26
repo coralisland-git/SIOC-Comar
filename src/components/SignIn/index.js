@@ -91,7 +91,6 @@ class SignIn extends Component {
     render() {
         const {saving} = this.props;
         const {user} = this.state;
-        console.log(user);
         return (
             <Grid>
                 {!this.state.register ?

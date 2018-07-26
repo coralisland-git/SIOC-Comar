@@ -164,3 +164,57 @@ export function requestUser(id) {
 export function receiveOneUser(user) {
     return {type: USER_FETCH_SUCCEEDED, user};
 }
+
+export const CLIENT_SAVE_REQUESTED = 'CLIENT_SAVE_REQUESTED';
+export const CLIENT_SAVE_SUCCEEDED = 'CLIENT_SAVE_SUCCEEDED';
+export const CLIENT_SAVE_FAILED = 'CLIENT_SAVE_FAILED';
+export const CLIENT_CLEAR_SAVED = 'CLIENT_CLEAR_SAVED';
+
+export function requestSaveClient(client) {
+    return {type: CLIENT_SAVE_REQUESTED, client};
+}
+
+export function notifyClientSavedSuccessfully() {
+    return {type: CLIENT_SAVE_SUCCEEDED};
+}
+
+export function notifyClientSaveFailed() {
+    return {type: CLIENT_SAVE_FAILED};
+}
+
+export function clearClientSaved() {
+    return {type: CLIENT_CLEAR_SAVED};
+}
+
+export const CLIENT_FETCH_REQUESTED = 'CLIENT_FETCH_REQUESTED ';
+export const CLIENT_FETCH_SUCCEEDED = 'CLIENT_FETCH_SUCCEEDED ';
+
+export function requestClients() {
+    return {type: CLIENT_FETCH_REQUESTED};
+}
+
+export function receiveClients(clients) {
+    return {type: CLIENT_FETCH_SUCCEEDED, clients};
+}
+
+export const CLIENT_DELETE_REQUESTED = 'CLIENT_DELETE_REQUESTED ';
+export const CLIENT_DELETE_SUCCEEDED = 'CLIENT_DELETE_SUCCEEDED ';
+
+export function requestDeleteClient(clientId) {
+    return {type: CLIENT_DELETE_REQUESTED, clientId};
+}
+
+export function notifyClientDeletedSuccessfully(clientId) {
+    return {type: CLIENT_DELETE_SUCCEEDED, clientId};
+}
+
+export const CLIENT_SEARCH_REQUESTED = 'CLIENT_SEARCH_REQUESTED';
+export const CLIENT_SEARCH_SUCCEEDED = 'CLIENT_SEARCH_SUCCEEDED';
+
+export function requestSearchClients(term) {
+    return {type: CLIENT_SEARCH_REQUESTED, term};
+}
+
+export function receiveClientsOptions(clientsOptions) {
+    return {type: CLIENT_SEARCH_SUCCEEDED, clientsOptions};
+}

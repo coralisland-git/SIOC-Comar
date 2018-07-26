@@ -17,10 +17,11 @@ const MultipleSearchBox = compose(
     }),
     lifecycle({
         componentWillMount() {
+            console.log('@@@@@@@@@@@@@@@@@', this.props);
             const refs = {};
             this.setState({
                 places: {},
-                value: [],
+                value: this.props.value,
                 onSearchBoxMounted: ref => {
                     refs.searchBox = ref;
                 },
@@ -41,12 +42,10 @@ const MultipleSearchBox = compose(
                     this.setState({
                         value
                     })
-                    console.log(value);
                     this.props.onChange(value);
                 },
                 onChange: (value) => {
                     this.setState({value});
-                    console.log(value);
                     this.props.onChange(value);
                 }
             });
